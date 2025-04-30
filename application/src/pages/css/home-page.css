@@ -1,0 +1,10 @@
+.top-bar{
+  width: 80%;             /* Full width */
+  background-color: #333;  /* Dark background */
+  position: relative;      /* Default: keeps it at the top */
+  margin-bottom: 60px;
+}
+
+.button{
+    display: flexbox;
+}
