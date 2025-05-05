@@ -1,9 +1,84 @@
-.navbar.bg-body-tertiary.fixed-top {
-            width: 80%;
-            /* Full width */
-            background-color: #333;
-            /* Dark background */
-            position: relative;
-            /* Default: keeps it at the top */
-            margin-bottom: 60px;
+/* Toggle Button */
+.toggle-button {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 900;
+    /* less than sidebar */
+    background-color: #a0a1a1;
+    color: white;
+    border: none;
+    padding: 0.3rem 0.6rem;
+    font-size: 1.2rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: opacity 0.4s ease;
+}
+
+.toggle-button.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.toggle-button.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 240px;
+    background-color: #a0a1a1;
+    color: white;
+    padding: 1rem;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+}
+
+.sidebar.closed {
+    transform: translateX(-100%);
+}
+
+.sidebar.open {
+    transform: translateX(0);
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar-menu li {
+    margin: 1rem 0;
+}
+
+.sidebar-menu a {
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.2s ease;
+}
+
+.sidebar-menu a:hover {
+    color: #c1f6e8;
 }

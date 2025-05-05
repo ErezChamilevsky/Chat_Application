@@ -1,9 +1,9 @@
 import React from 'react';
+import './css/indicator-loading.css'
 
-function TextMessage({ text, sender}) {
-    const isUser = sender === 'user';
+function LoadingIndicator() {
     return (
-        <div className={`d-flex ${isUser ? 'justify-content-end' : 'justify-content-start'}`}>
+        <div className="d-flex justify-content-start mb-2">
             <div
                 className="px-3 py-2 rounded"
                 style={{
@@ -11,13 +11,17 @@ function TextMessage({ text, sender}) {
                     color: '#000',
                     maxWidth: '80%',
                     borderRadius: '12px',
-                    whiteSpace: 'pre-wrap'
                 }}
             >
-                {text}
+                <div className="typing-indicator">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
             </div>
         </div>
     );
-};
+}
 
-export default TextMessage;
+export default LoadingIndicator;
+
