@@ -32,7 +32,7 @@
     left: 0;
     height: 100%;
     width: 240px;
-    background-color: #a0a1a1;
+    background-color: #747878;
     color: white;
     padding: 1rem;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
@@ -80,5 +80,5 @@
 }
 
 .sidebar-menu a:hover {
-    color: #c1f6e8;
+    color: #747878;
 }

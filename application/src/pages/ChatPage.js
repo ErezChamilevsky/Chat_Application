@@ -3,13 +3,13 @@ import { GoogleGenAI } from "@google/genai";
 import ChatConversation from '../components/chat/ChatConversation';
 import ChatInput from '../components/chat/ChatInput';
 import NavBar from '../components/utilities/NavBar';
-import { GEMINI_API_KEY } from '../ConstantStrings';
+import { GEMINI_API_KEY, PROMPT_INSTRUCTION_FOR_CHAT } from '../ConstantStrings';
 import './css/page-chat.css';
 
 function ChatPage() {
     const [messages, setMessages] = useState([]);
     const chatRef = useRef(null);
-
+    const englishLevel = "B1";
     // Create a Gemini chat session on component mount
     useEffect(() => {
         const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
@@ -17,9 +17,7 @@ function ChatPage() {
         chatRef.current = ai.chats.create({
             model: "gemini-2.0-flash",
             config: {
-                systemInstruction: "this is an English practice application. you should respone in context" + 
-                "for one to two lines and then space row and after that give a feedback on what the user send if there is needing, if it is fine don't feedback " +
-                "your level of English supposed to be B1",
+                systemInstruction: PROMPT_INSTRUCTION_FOR_CHAT + englishLevel,
             },
             history: [
                 {

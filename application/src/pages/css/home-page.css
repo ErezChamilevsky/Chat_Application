@@ -1,5 +1,5 @@
 .top-bar{
-  width: 80%;             /* Full width */
+  width: 80vw;             /* Full width */
   background-color: #333;  /* Dark background */
   position: relative;      /* Default: keeps it at the top */
   margin-bottom: 60px;
