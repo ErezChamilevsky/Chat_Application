@@ -1,0 +1,14 @@
+.text-message-bubble {
+    background-color: #f0f0f0;
+    color: #000;
+    max-width: 80%;
+    border-radius: 12px;
+    white-space: pre-wrap;
+    position: relative;
+    padding: 0.5rem 1rem;
+    /* equivalent to px-3 py-2 in Bootstrap */
+}
+
+.bot-speaker-wrapper {
+    margin-top: 8px;
+}

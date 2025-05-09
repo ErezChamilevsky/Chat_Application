@@ -1,13 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import './synthez-test.css';
 
 // more details here https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis/getVoices
 
-function SpeechSynthesizer(){
+function ChooseVoice(){
     const synth = window.speechSynthesis;
     const [voices, setVoices] = useState([]);
     const [selectedVoice, setSelectedVoice] = useState('');
-    const [text, setText] = useState('');
     const [rate, setRate] = useState(1);
     const [pitch, setPitch] = useState(1);
 
@@ -37,8 +35,8 @@ function SpeechSynthesizer(){
             return;
         }
 
-        if (text !== '') {
-            const utterThis = new SpeechSynthesisUtterance(text);
+        // if (text !== '') {
+            const utterThis = new SpeechSynthesisUtterance("Hey there my name is" + selectedVoice);
 
             utterThis.onend = () => {
                 console.log('SpeechSynthesisUtterance.onend');
@@ -56,7 +54,7 @@ function SpeechSynthesizer(){
             utterThis.pitch = pitch;
             utterThis.rate = rate;
             synth.speak(utterThis);
-        }
+        // }
     };
 
     const handleSubmit = (e) => {
@@ -70,7 +68,7 @@ function SpeechSynthesizer(){
             <h1>Speech Synthesizer</h1>
 
             <form onSubmit={handleSubmit}>
-                <label htmlFor="txt">Enter text</label>
+                {/* <label htmlFor="txt">Enter text</label>
                 <input
                     id="txt"
                     type="text"
@@ -103,11 +101,13 @@ function SpeechSynthesizer(){
                         id="pitch"
                         onChange={(e) => setPitch(e.target.value)}
                     />
-                    <div className="pitch-value">{pitch}</div>
-                </div>
+                    <div className="pitch-value">{pitch}</div> */}
+                {/* </div> */}
                 <select
                     value={selectedVoice}
-                    onChange={(e) => setSelectedVoice(e.target.value)}
+                    onChange={(e) => {setSelectedVoice(e.target.value);
+                        setTimeout(speak, 0);}
+                    }
                 >
                     {voices.map((voice, index) => (
                         <option key={index} value={voice.name}>
@@ -115,14 +115,14 @@ function SpeechSynthesizer(){
                         </option>
                     ))}
                 </select>
-                <div className="controls">
+                {/* <div className="controls">
                     <button id="play" type="submit">
                         Play
                     </button>
-                </div>
+                </div> */}
             </form>
         </div>
     );
 };
 
-export default SpeechSynthesizer;
+export default ChooseVoice;

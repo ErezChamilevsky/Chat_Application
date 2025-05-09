@@ -5,6 +5,8 @@ import ChatPage from './pages/ChatPage'
 import ApiTest from './ApiTest';
 import RecordTest from './RecordTest';
 import SpeechSynthesizer from './SpeechSynthesizer';
+import ChooseVoice from './components/utilities/ChooseVoice';
+import BotSpeaker from './components/chat/BotSpeaker';
 
 
 
@@ -18,6 +20,9 @@ function App() {
           <Route path='/test' element={<ApiTest/>}/>
           <Route path='/record' element={<RecordTest />} />
           <Route path='/synthesizer' element={<SpeechSynthesizer />} />
+          <Route path='/chooseVoice' element={<ChooseVoice/>} />
+          <Route path='/bot' element={<BotSpeaker text = {"this is text to test"}/>} />
+
           
         </Routes>
       </Router> 
