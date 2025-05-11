@@ -2,9 +2,9 @@ import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage'
 import ChatPage from './pages/ChatPage'
-import ApiTest from './ApiTest';
+import ApiTest from './zexamples/ApiTest';
 import RecordTest from './RecordTest';
-import SpeechSynthesizer from './SpeechSynthesizer';
+import SpeechSynthesizer from './zexamples/SpeechSynthesizer';
 import ChooseVoice from './components/utilities/ChooseVoice';
 import BotSpeaker from './components/chat/BotSpeaker';
 

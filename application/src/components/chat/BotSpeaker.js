@@ -3,6 +3,7 @@ import { SELECTED_VOICE } from '../../ConstantStrings';
 
 const BotSpeaker = ({ text }) => {
     const [voice, setVoice] = useState(null);
+    const [isSpeaking, setIsSpeaking] = useState(false);
     const synth = window.speechSynthesis;
 
     useEffect(() => {
@@ -12,26 +13,32 @@ const BotSpeaker = ({ text }) => {
             setVoice(matchedVoice || null);
         };
 
-        // Voices might not be immediately available
         if (synth.onvoiceschanged !== undefined) {
             synth.onvoiceschanged = loadVoices;
         }
         loadVoices();
     }, [synth]);
 
-    const speak = () => {
-        if (!text || synth.speaking) return;
-
-        const utterance = new SpeechSynthesisUtterance(text);
-        if (voice) utterance.voice = voice;
-        synth.speak(utterance);
+    const toggleSpeech = () => {
+        if (synth.speaking) {
+            synth.cancel();  // Stops the speech
+            setIsSpeaking(false);
+        } else if (text) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            if (voice) utterance.voice = voice;
+            utterance.onend = () => setIsSpeaking(false);
+            synth.speak(utterance);
+            setIsSpeaking(true);
+        }
     };
 
-    return (<div>
-        <i class="bi bi-file-play"></i>
-
-        <button className="btn btn-white" onClick={speak}>🔊</button>
-    </div>
+    return (
+        <div>
+            {/* Use Bootstrap Icons or your preferred icon library */}
+            <button className="btn btn-light" onClick={toggleSpeech}>
+                <i className={`bi ${isSpeaking ? 'bi-stop-circle' : 'bi-play-circle'}`} style={{ fontSize: '1.5rem' }}></i>
+            </button>
+        </div>
     );
 };
 

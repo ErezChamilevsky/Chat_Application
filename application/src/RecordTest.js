@@ -1,9 +1,8 @@
 
 import * as sdk from 'microsoft-cognitiveservices-speech-sdk';
-import { ChangeService } from './ChangeService';
 import Microphone from './components/utilities/Microphone';
 import SpeechToElement from 'speech-to-element';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './test-record.css';
 import { ToggleWebSpeech } from './components/utilities/ToggleSpeech';
 
@@ -18,7 +17,7 @@ function RecordTest() {
 
     useEffect(() => {
         if (!window.SpeechSDK) window.SpeechSDK = sdk;
-        const availableServicesArr = [{ value: 'azure', text: 'Azure Speech' }];
+        const availableServicesArr = [{value:'', text: '' }];
         if (SpeechToElement.isWebSpeechSupported()) {
             availableServicesArr.unshift({ value: 'webspeech', text: 'Web Speech' });
         }
@@ -52,20 +51,6 @@ function RecordTest() {
                         <div id="message-empty">Placeholder text</div>
                     )}
                 </div>
-                <select
-                    id="dropdown"
-                    value={activeService}
-                    onChange={(event) => {
-                        ChangeService(isRecording, isPreparing, setIsError);
-                        setActiveService(event.target.value);
-                    }}
-                >
-                    {availableServices.map((service) => (
-                        <option key={service.value} value={service.value}>
-                            {service.text}
-                        </option>
-                    ))}
-                </select>
             </main>
         </>
     );

@@ -1,0 +1,20 @@
+/* Ensures both mic and send buttons take the same space */
+.chat-button {
+    aspect-ratio: 1 / 1;
+    /* Square button */
+    width: 3em;
+    /* Scalable relative to font size */
+    min-width: 3em;
+    max-width: 3em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+/* Make sure microphone SVG/icon scales */
+.chat-button svg,
+#microphone {
+    width: 1.5em;
+    height: 1.5em;
+}
