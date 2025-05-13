@@ -1,10 +1,10 @@
 
 import * as sdk from 'microsoft-cognitiveservices-speech-sdk';
-import Microphone from './components/utilities/Microphone';
+import Microphone from '../components/utilities/Microphone';
 import SpeechToElement from 'speech-to-element';
 import { useEffect, useRef, useState } from 'react';
 import './test-record.css';
-import { ToggleWebSpeech } from './components/utilities/ToggleSpeech';
+import { ToggleWebSpeech } from '../components/utilities/ToggleSpeech';
 
 
 function RecordTest() {
