@@ -20,7 +20,7 @@ function NavBar() {
 
             <div className={`sidebar ${isOpen ? "open" : "closed"}`}>
                 <div className="sidebar-header">
-                    <h3>PlaceHolder</h3>
+                    <h3>ChatENG</h3>
                     <button className="close-button" onClick={toggleSidebar}>×</button>
                 </div>
                 <ul className="sidebar-menu">

@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const customEnv = require('custom-env');
 const mongoose = require('mongoose');
+const geminiRoutes = require('./routes/geminiRoutes.js');
 const users = require('./routes/user');
 const videos = require('./routes/video');
 const tokens = require('./routes/tokens')
@@ -30,7 +31,8 @@ console.log(process.env.PORT);
 
 
 server.use(express.json());
-server.use('/api/gemini/', require('./routes/gemini'));
+server.use('/api/gemini', geminiRoutes);
+
 //this routes is for users crud operations
 // server.use('/api/users/', users);
 //this routes is for videos crud operations
