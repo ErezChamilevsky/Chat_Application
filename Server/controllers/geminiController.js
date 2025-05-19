@@ -1,5 +1,7 @@
-// controllers/geminiController.js
+const geminiService = require('../services/geminiService.js');
+const Session = require("../models/session.js");
 const { GoogleGenAI } = require("@google/genai");
+const dotenv = require("dotenv");
 const {
     GEMINI_API_KEY,
     PROMPT_INSTRUCTION_FOR_CHAT,
@@ -7,36 +9,44 @@ const {
     PROMPT_INSTRUCTION_FOR_GENERATE_TEST,
     THE_QUESTION_LEVEL
 } = require("../config/constants.js");
+dotenv.config();
 
-const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
-
-let chatSessions = {}; // Optional: Store chat sessions by user or session ID
+const getSession = async (req, res) => {
+    console.log("getSession");
+    try {
+        const sessionId = await geminiService.createSession();
+        res.json({ msg: sessionId });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
 
 const sendChatMessage = async (req, res) => {
-    console.log("we did it");
+    console.log("send message");
     const { message, sessionId, englishLevel } = req.body;
 
     try {
-        if (!chatSessions[sessionId]) {
-            chatSessions[sessionId] = await ai.chats.create({
-                model: "gemini-2.0-flash",
-                config: {
-                    systemInstruction: PROMPT_INSTRUCTION_FOR_CHAT + englishLevel,
-                },
-                history: [
-                    { role: "user", parts: [{ text: "Hello" }] },
-                    { role: "model", parts: [{ text: "Hi! How can I help you today?" }] },
-                ]
-            });
-        }
-
-        const response = await chatSessions[sessionId].sendMessage({ message });
-        return res.json({ text: response.text });
-
+        const responseText = await geminiService.sendMessage(sessionId, message, englishLevel);
+        res.json({ text: responseText });
     } catch (err) {
-        return res.status(500).json({ error: err.message });
+        console.error("sendChatMessage error:", err);
+        res.status(500).json({ error: err.message });
     }
 };
+
+const saveChatSession = async (req, res) => {
+    console.log("saveChatSession");
+    const { sessionId } = req.body;
+
+    try {
+        await geminiService.saveSession(sessionId);
+        res.json({ message: "Session saved." });
+    } catch (err) {
+        console.error("saveChatSession error:", err);
+        res.status(500).json({ error: err.message });
+    }
+};
+
 
 const generateTestQuestion = async (req, res) => {
     const { typeOfTest, EnglishLevel } = req.body;
@@ -72,9 +82,32 @@ const checkAnswer = async (req, res) => {
     }
 };
 
+const simpleTest = async (req, res) => {
+    try {
+        const result = await ai.models.generateContent({
+            model: "gemini-2.0-flash",
+            contents: [
+                {
+                    role: "user",
+                    parts: [{ text: "type me 'hey bro you made it'" }],
+                },
+            ],
+        });
+        
+        return res.json({ output: result.text });
+
+    } catch (err) {
+        console.error("Gemini error:", err);
+        res.status(500).json({ error: err.message });
+    }
+};
+
 
 module.exports = {
     sendChatMessage,
     generateTestQuestion,
-    checkAnswer
+    checkAnswer,
+    simpleTest,
+    getSession,
+    saveChatSession
 }

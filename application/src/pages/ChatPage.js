@@ -1,60 +1,48 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { GoogleGenAI } from "@google/genai";
 import ChatConversation from '../components/chat/ChatConversation';
 import ChatInput from '../components/chat/ChatInput';
 import NavBar from '../components/utilities/NavBar';
-import { GEMINI_API_KEY, PROMPT_INSTRUCTION_FOR_CHAT } from '../ConstantStrings';
 import './css/page-chat.css';
 
 function ChatPage() {
     const [messages, setMessages] = useState([]);
-    const chatRef = useRef(null);
-    const englishLevel = "B1";
-    // Create a Gemini chat session on component mount
+    const [sessionId, setSessionId] = useState(null);
+
     useEffect(() => {
-        const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
-
-        chatRef.current = ai.chats.create({
-            model: "gemini-2.0-flash",
-            config: {
-                systemInstruction: PROMPT_INSTRUCTION_FOR_CHAT + englishLevel,
-            },
-            history: [
-                {
-                    role: "user",
-                    parts: [{ text: "Hello" }],
-                },
-                {
-                    role: "model",
-                    parts: [{ text: "Hi! How can I help you today?" }],
-                },
-            ],
-        });
-
-        // Add initial messages to UI
-        setMessages([
-            { text: "Hi! How can I help you today?", sender: 'bot' }
-        ]);
+        const initializeChat = async () => {
+            const res = await fetch('/api/gemini/session');
+            const data = await res.json();
+            setSessionId(data.msg);
+            setMessages([{ text: "Hi! How can I help you today?", sender: 'bot' }]);
+        };
+        initializeChat();
     }, []);
 
     const handleSend = async (msg) => {
         if (!msg.trim()) return;
-
-        // Show user message
         setMessages(prev => [...prev, { text: msg, sender: 'user' }]);
 
-        try {
-            const response = await chatRef.current.sendMessage({
-                message: msg
-            });
+        const res = await fetch('/api/gemini/send', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                message: msg,
+                sessionId,
+                englishLevel: 'B1'
+            }),
+        });
 
-            setMessages(prev => [...prev, { text: response.text, sender: 'bot' }]);
-        } catch (err) {
-            setMessages(prev => [...prev, {
-                text: err.message || 'Something went wrong',
-                sender: 'bot'
-            }]);
-        }
+        const data = await res.json();
+        setMessages(prev => [...prev, { text: data.text, sender: 'bot' }]);
+    };
+
+    const handleSave = async () => {
+        await fetch('/api/gemini/save', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ sessionId })
+        });
+        alert('Chat saved!');
     };
 
     return (
@@ -67,6 +55,9 @@ function ChatPage() {
                             <ChatConversation messages={messages} />
                         </div>
                         <ChatInput onSend={handleSend} />
+                        <button className="btn btn-primary mt-2" onClick={handleSave}>
+                            Save Chat
+                        </button>
                     </div>
                 </div>
             </div>

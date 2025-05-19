@@ -8,6 +8,7 @@ import ChooseVoice from './components/utilities/ChooseVoice';
 import BotSpeaker from './components/chat/BotSpeaker';
 import TestPage from './pages/TestPage';
 import WritingQuestion from './components/test/WritingQuestion';
+import Temp from './pages/Temp';
 
 
 
@@ -18,7 +19,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/chat" element={<ChatPage />} />
-          {/* <Route path='/test' element={<ApiTest/>}/> */}
+          <Route path='/temp' element={<Temp/>}/>
           <Route path='/test' element={<TestPage/>} />
           <Route path='/synthesizer' element={<SpeechSynthesizer />} />
           <Route path='/chooseVoice' element={<ChooseVoice/>} />
