@@ -23,3 +23,5 @@
 #server
 Server/services/user.js
 Server/services/tokens.js
+
+application/src/ConstantStrings.js
