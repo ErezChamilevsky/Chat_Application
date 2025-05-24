@@ -1,8 +1,12 @@
 const { GoogleGenAI } = require('@google/genai');
 const {
     GEMINI_API_KEY,
-    PROMPT_INSTRUCTION_FOR_CHAT
+    PROMPT_INSTRUCTION_FOR_CHAT,
+    PROMPT_INSTRUCTION_FOR_GENERATE_TEST,
+    PROMPT_CHECK_INSTRUCTION_FOR_USER_ANSWER
 } = require('../config/constants.js');
+
+
 const Session = require('../models/session.js');
 
 const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
@@ -59,8 +63,42 @@ async function saveSession(sessionId) {
     });
 }
 
+async function generateQuestion(testType) {
+    const response = await ai.models.generateContent({
+        model: "gemini-2.0-flash",
+        contents: "Give me English questions",
+        config: {
+            systemInstruction: PROMPT_INSTRUCTION_FOR_GENERATE_TEST + testType,
+        },
+    });
+    return response.text;
+}
+
+async function checkAnswer(type, questions, answers) {
+    if (!Array.isArray(questions) || !Array.isArray(answers) || questions.length !== answers.length) {
+        throw new Error("Questions and answers must be arrays of equal length.");
+    }
+
+    const formattedInput = questions.map((question, i) =>
+        `Q${i + 1}: ${question}\nA${i + 1}: ${answers[i]}`
+    ).join('\n');
+
+    const response = await ai.models.generateContent({
+        model: "gemini-2.0-flash",
+        contents: formattedInput,
+        config: {
+            systemInstruction: PROMPT_CHECK_INSTRUCTION_FOR_USER_ANSWER,
+        },
+    });
+
+    return response.text;
+}
+
+
 module.exports = {
     createSession,
     sendMessage,
-    saveSession
+    saveSession,
+    generateQuestion,
+    checkAnswer
 };

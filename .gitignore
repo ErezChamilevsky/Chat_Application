@@ -19,3 +19,7 @@
 
 # Coverage
 **/coverage/
+
+#server
+Server/services/user.js
+Server/services/tokens.js

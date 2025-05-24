@@ -7,7 +7,6 @@ import SpeechSynthesizer from './zexamples/SpeechSynthesizer';
 import ChooseVoice from './components/utilities/ChooseVoice';
 import BotSpeaker from './components/chat/BotSpeaker';
 import TestPage from './pages/TestPage';
-import WritingQuestion from './components/test/WritingQuestion';
 import Temp from './pages/Temp';
 
 
@@ -24,7 +23,6 @@ function App() {
           <Route path='/synthesizer' element={<SpeechSynthesizer />} />
           <Route path='/chooseVoice' element={<ChooseVoice/>} />
           <Route path='/bot' element={<BotSpeaker text = {"this is text to test"}/>} />
-          <Route path='/writing' element={<WritingQuestion setWritingScore = {null} EnglishLevel={"A1"} />} />
 
 
           

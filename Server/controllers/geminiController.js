@@ -1,14 +1,5 @@
 const geminiService = require('../services/geminiService.js');
-const Session = require("../models/session.js");
-const { GoogleGenAI } = require("@google/genai");
 const dotenv = require("dotenv");
-const {
-    GEMINI_API_KEY,
-    PROMPT_INSTRUCTION_FOR_CHAT,
-    PROMPT_CHECK_USER_ANSWER_INSTRUCTION,
-    PROMPT_INSTRUCTION_FOR_GENERATE_TEST,
-    THE_QUESTION_LEVEL
-} = require("../config/constants.js");
 dotenv.config();
 
 const getSession = async (req, res) => {
@@ -48,66 +39,37 @@ const saveChatSession = async (req, res) => {
 };
 
 
-const generateTestQuestion = async (req, res) => {
-    const { typeOfTest, EnglishLevel } = req.body;
+const generateQuestion = async (req, res) => {
+    const { typeOfTest } = req.body;
 
     try {
-        const response = await ai.models.generateContent({
-            model: "gemini-2.0-flash",
-            contents: "Give me English question",
-            config: {
-                systemInstruction: PROMPT_INSTRUCTION_FOR_GENERATE_TEST + typeOfTest + THE_QUESTION_LEVEL + EnglishLevel,
-            },
-        });
-        return res.json({ question: response.text });
+        const responseText = await geminiService.generateQuestion(typeOfTest);
+        res.json({ text: responseText });
     } catch (err) {
-        return res.status(500).json({ error: err.message });
+        console.error("generateTestQuestion controller error:", err);
+        res.status(500).json({ error: err.message });
     }
 };
 
 const checkAnswer = async (req, res) => {
-    const { question, answer } = req.body;
+    const { type, questions, answers } = req.body;
 
     try {
-        const response = await ai.models.generateContent({
-            model: "gemini-2.0-flash",
-            contents: `Question: ${question} Answer: ${answer}`,
-            config: {
-                systemInstruction: PROMPT_CHECK_USER_ANSWER_INSTRUCTION,
-            },
-        });
-        return res.json({ feedback: response.text });
+        const grade = await geminiService.checkAnswer(type, questions, answers);
+        res.json({ text: grade });
     } catch (err) {
-        return res.status(500).json({ error: err.message });
-    }
-};
-
-const simpleTest = async (req, res) => {
-    try {
-        const result = await ai.models.generateContent({
-            model: "gemini-2.0-flash",
-            contents: [
-                {
-                    role: "user",
-                    parts: [{ text: "type me 'hey bro you made it'" }],
-                },
-            ],
-        });
-        
-        return res.json({ output: result.text });
-
-    } catch (err) {
-        console.error("Gemini error:", err);
+        console.error("checkAnswer controller error:", err);
         res.status(500).json({ error: err.message });
     }
 };
 
 
+
+
 module.exports = {
     sendChatMessage,
-    generateTestQuestion,
+    generateQuestion,
     checkAnswer,
-    simpleTest,
     getSession,
     saveChatSession
 }
